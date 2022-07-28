@@ -21,6 +21,10 @@ public class RegionsDTO {
 	public void setRegion_name(String region_name) {
 		this.region_name = region_name;
 	}
+	public void setRegion(RegionsDTO regionsDTO) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 
