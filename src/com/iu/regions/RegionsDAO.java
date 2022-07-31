@@ -8,87 +8,57 @@ import java.util.ArrayList;
 import com.iu.util.DBConnector;
 
 public class RegionsDAO {
-	
-	//3. Regions에 데이터 추가
-	public int setRegion(RegionsDTO regionDTO)throws Exception{
-		//1. DB 연결
-		Connection con = DBConnector.getConnection();
-		//2. SQL문 생성
-		String sql="INSERT INTO REGIONS VALUES(?,?)";
-		//3. 미리 전송
-		PreparedStatement st = con.prepareStatement(sql);
-		//4. ? 세팅
-		st.setInt(1, regionDTO.getRegion_id());
-		st.setString(2, regionDTO.getRegion_name());
-		//5. 최종 전송 후 결과 처리
-		int result = st.executeUpdate();
-		//6. 자원해제
-		DBConnector.disConnect(null, st, con);
-		
-		return 1;
-	}
-	
-	//2. Regions에서 하나의 결과(row)
-	public RegionsDTO getDetail(int region_id)throws Exception{
-		RegionsDTO regionsDTO=null;
-		//1. DB 연결
-		Connection con  = DBConnector.getConnection();
-		
-		//2. SQL문 작성
-		String sql="SELECT * FROM REGIONS WHERE REGION_ID=?";
-		
-		//3. 미리 전송
-		PreparedStatement st = con.prepareStatement(sql);
-		
-		//4. ? 값 세팅
-		// WHERE NUM BETEEN ?(1) AND ?(2);
-		st.setInt(1, region_id);
-		
-		//5. 최종 전송 후 결과 처리
-		ResultSet rs = st.executeQuery();
-		
-		if(rs.next()) {
-			regionsDTO = new RegionsDTO();
-			int rId= rs.getInt(1);
-			regionsDTO.setRegion_id(rId);
-			regionsDTO.setRegion_name(rs.getString(2));
-			
-		}
-		
-		//6. 자원해제
-		DBConnector.disConnect(rs, st, con);
-		
-		return regionsDTO;
-		
-	}
-	
-	
-	//1. Regions 의 모든 데이터 가져오기
+	// 1. regions 테이블의 모든 데이터 가져오기
 	public ArrayList<RegionsDTO> getList() throws Exception {
-		ArrayList<RegionsDTO> ar = new ArrayList();
-		//1.DB 연결
+		ArrayList<RegionsDTO> arr = new ArrayList<>();
+		// 1. DB 연결
 		Connection con = DBConnector.getConnection();
-		
-		//2. Query 문 작성
-		String sql="SELECT * FROM REGIONS";
-		
-		//3. Query 문 미리 전송
+		// 2. query문 작성
+		String sql = "SELECT * FROM regions"; // 세미콜론 자동으로 해줌
+		// 3. query문 미리 전송
 		PreparedStatement st = con.prepareStatement(sql);
-		
-		//4. 
-		
-		//5. 최종 전송 후 결과를 처리
+		// 4. sql문 안에 ?가 있을경우 세팅
+		// 5. 최종 전송 후 결과를 처리
 		ResultSet rs = st.executeQuery();
 		
 		while(rs.next()) {
-			RegionsDTO regionsDTO = new RegionsDTO();
-			regionsDTO.setRegion_id(rs.getInt("Region_id"));
-			regionsDTO.setRegion_name(rs.getString("Region_name"));
-			ar.add(regionsDTO);
+			RegionsDTO dto = new RegionsDTO();
+			dto.setRegionId(rs.getInt("REGION_ID"));
+			dto.setRegionName(rs.getString("REGION_NAME"));
+			arr.add(dto);
 		}
-		//6. 자원 해제
+		// 6. 자원 해제
 		DBConnector.disConnect(rs, st, con);
-		return ar;
+		return arr;
 	}
-
+	
+	// 2. regions에서 하나의 결과(row)
+	public RegionsDTO getDetail(int region_id) throws Exception {
+		RegionsDTO dto = new RegionsDTO();
+		Connection con = DBConnector.getConnection();
+//		String sql = "SELECT * FROM regions WHERE region_id = "+region_id; 위험한 방법
+		String sql = "SELECT * FROM regions WHERE region_id = ?";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, region_id); // index는 대개 0부터 시작하나 오라클은 1부터 시작 인덱스 순서는 무조건 앞에서부터
+		ResultSet rs = st.executeQuery();
+		
+		if(rs.next()) {
+			dto.setRegionId(rs.getInt(1));
+			dto.setRegionName(rs.getString(2));
+		}
+		DBConnector.disConnect(rs, st, con);
+		return dto;
+	}
+	
+	public int setRegion(RegionsDTO dto) throws Exception {
+		Connection con = DBConnector.getConnection();
+		String sql = "INSERT INTO REGIONS VALUES (?,?)";
+		PreparedStatement st = con.prepareStatement(sql);
+		st.setInt(1, dto.getRegionId());
+		st.setString(2, dto.getRegionName());
+		int row = st.executeUpdate();
+		
+		DBConnector.disConnect(st, con);
+		return row;
+	}
 }
