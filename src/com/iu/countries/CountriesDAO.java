@@ -11,20 +11,18 @@ public class CountriesDAO {
 	
 	//setCountry
 	
-	public void setCountry(String country_id)throws Exception {
-		CountriesDTO countriesDTO = null;
-		
+	public void getList() throws Exception {	
+		ArrayList<CountriesDTO> arr = new ArrayList<>();
 		Connection con = DBConnector.getConnection();
-		String sql = "SELCET * FROM "
+		String sql = "SELECT * FROM countries";
 	}
 	//getDetail : countries_id
 	public CountriesDTO getDetail(String country_id)throws Exception{
 		
-		CountriesDTO countriesDTO= null;
+		CountriesDTO countriesDTO= new CountriesDTO();
 		
 		//1. DB 연결
 		Connection con = DBConnector.getConnection();
-		
 		
 		//2. SQL 작성
 		String sql ="SELECT * FROM COUNTRIES WHERE COUNTRY_ID=?";

@@ -8,24 +8,19 @@ public class RegionsDTO {
 	private Integer region_id;
 	private String region_name;
 	
-	
-	public Integer getRegion_id() {
+	public int getRegionId() {
 		return region_id;
 	}
-	public void setRegion_id(Integer region_id) {
-		this.region_id = region_id;
+	
+	public void setRegionId(int regionId) {
+		this.region_id = regionId;
 	}
-	public String getRegion_name() {
+	
+	public String getRegionName() {
 		return region_name;
 	}
-	public void setRegion_name(String region_name) {
-		this.region_name = region_name;
-	}
-	public void setRegion(RegionsDTO regionsDTO) {
-		// TODO Auto-generated method stub
-		
-	}
 	
-	
-
+	public void setRegionName(String regionName) {
+		this.region_name = regionName;
+	}
 }
